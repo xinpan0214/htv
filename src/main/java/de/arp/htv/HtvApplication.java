@@ -7,8 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import de.arp.htv.model.Channel;
-import de.arp.htv.repo.ChannelRepo;
+import de.arp.htv.service.ChannelService;
 
 @SpringBootApplication
 public class HtvApplication implements CommandLineRunner {
@@ -20,17 +19,15 @@ public class HtvApplication implements CommandLineRunner {
     }
 
     @Autowired
-    private ChannelRepo channelRepo;
+    private ChannelService channelService;
     
 	/* (non-Javadoc)
 	 * @see org.springframework.boot.CommandLineRunner#run(java.lang.String[])
 	 */
 	@Override
 	public void run(String... arg0) throws Exception {
-		log.info("Initializing channel database");
-		channelRepo.save(new Channel("daserste").setDisplayName("Das Erste"));
-		channelRepo.save(new Channel("zdf").setDisplayName("ZDF"));
-		channelRepo.save(new Channel("arte").setDisplayName("ARTE"));
+		log.info("Initializing application");
+		channelService.initializeDefaults();
 	}
     
     
