@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Vendor: Pivotal Software, Inc.
+Implementation-Title: htv
+Implementation-Version: 1.0.0-SNAPSHOT
+Implementation-Vendor-Id: de.arp
+Build-Jdk: 1.7.0_67
+Built-By: arp
+Created-By: Maven Integration for Eclipse
+
