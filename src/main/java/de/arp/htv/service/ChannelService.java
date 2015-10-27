@@ -3,6 +3,15 @@
  */
 package de.arp.htv.service;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +42,27 @@ public class ChannelService {
 	
 	public Iterable<Channel> findAllChannels() {
 		return channelRepo.findAll();
+	}
+	
+	public String getEpg(Channel channel) throws IOException {
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		HttpGet get = new HttpGet("http://xmltv.xmltv.se/3sat.de_2015-10-27.xml.gz");
+		CloseableHttpResponse response = null;
+		try {
+			response = httpClient.execute(get);
+			HttpEntity ent = response.getEntity();
+			if (ent != null) {
+				InputStream in = ent.getContent();
+				IOUtils.copy(in, System.out);
+				in.close();
+			}
+		} catch (Exception ex) {
+			return "failure";
+		} finally {
+			if (response != null) {
+				response.close();
+			}
+		}
+		return "success";
 	}
 }

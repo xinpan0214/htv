@@ -3,6 +3,8 @@
  */
 package de.arp.htv.controller;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,5 +32,10 @@ public class ChannelController {
 	@RequestMapping("/")
 	public Iterable<Channel> findChannels() {
 		return channelService.findAllChannels();
+	}
+	
+	@RequestMapping("/epg")
+	public String getEpg() throws IOException {
+		return channelService.getEpg(null);
 	}
 }
