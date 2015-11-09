@@ -66,12 +66,17 @@ public class ChannelService {
 		channelRepo.save(new Channel("super.rtl.de").setDisplayName("Super RTL").setVlcUrl("239.35.20.39:10000"));
 		channelRepo.save(new Channel("n-tv.de").setDisplayName("ntv").setVlcUrl("239.35.20.47:10000"));
 		channelRepo.save(new Channel("sixx.de").setDisplayName("SIXX").setVlcUrl("239.35.20.9:10000"));
-		channelRepo.save(new Channel("max.prosieben.de").setDisplayName("Pro7max").setVlcUrl("239.35.20.33:10000"));
+		channelRepo.save(new Channel("maxx.prosieben.de").setDisplayName("Pro7max").setVlcUrl("239.35.20.33:10000"));
 		channelRepo.save(new Channel("nitro.rtl.de").setDisplayName("RTLNITRO").setVlcUrl("239.35.20.59:10000"));
 
 //		channelRepo.save(new Channel("arte.de").setDisplayName("arte").setVlcUrl("239.35.10.20:10000"));
 		channelRepo.save(new Channel("phoenix.daserste.de").setDisplayName("Phoenix").setVlcUrl("239.35.10.22:10000"));
 		channelRepo.save(new Channel("3sat.de").setDisplayName("3sat").setVlcUrl("239.35.10.6:10000"));
+
+		channelRepo.save(new Channel("kika.daserste.de").setDisplayName("Ki.Ka").setVlcUrl("239.35.10.6:10000"));
+		channelRepo.save(new Channel("einsextra.daserste.de").setDisplayName("Tagesschau 24").setVlcUrl("239.35.10.25:10000"));
+		channelRepo.save(new Channel("einsfestival.daserste.de").setDisplayName("Einsfestival").setVlcUrl("239.35.10.21:10000"));
+		channelRepo.save(new Channel("einsplus.daserste.de").setDisplayName("EinsPlus").setVlcUrl("39.35.10.26:10000"));
 
 		
 		channelRepo.save(new Channel("arte.de").setDisplayName("ARTE HD").setVlcUrl("239.35.10.3:10000"));
