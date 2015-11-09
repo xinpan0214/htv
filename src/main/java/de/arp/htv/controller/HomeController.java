@@ -3,8 +3,12 @@
  */
 package de.arp.htv.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import de.arp.htv.service.ChannelService;
 
 /**
  * @author arp
@@ -13,8 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class HomeController {
 
+	@Autowired
+	private ChannelService channelService;
+	
 	@RequestMapping("/")
-	public String home() {
+	public String home(Model model) {
+		model.addAttribute("channels",channelService.findAllChannels());
 		return "home";
 	}
 }
