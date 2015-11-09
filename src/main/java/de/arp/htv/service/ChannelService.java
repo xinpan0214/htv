@@ -59,6 +59,21 @@ public class ChannelService {
 		channelRepo.save(new Channel("gold.sat1.de").setDisplayName("SAT.1 Gold").setVlcUrl("239.35.20.24:10000"));
 		channelRepo.save(new Channel("rtl.de").setDisplayName("RTL").setVlcUrl("239.35.20.10:10000"));
 		channelRepo.save(new Channel("rtl2.de").setDisplayName("RTL2").setVlcUrl("239.35.20.10:10000"));
+
+		channelRepo.save(new Channel("prosieben.de").setDisplayName("Pro 7").setVlcUrl("239.35.20.21:10000"));
+		channelRepo.save(new Channel("kabel1.de").setDisplayName("Kabel 1").setVlcUrl("239.35.20.38:10000"));
+		channelRepo.save(new Channel("vox.de").setDisplayName("VOX").setVlcUrl("239.35.20.11:10000"));
+		channelRepo.save(new Channel("super.rtl.de").setDisplayName("Super RTL").setVlcUrl("239.35.20.39:10000"));
+		channelRepo.save(new Channel("n-tv.de").setDisplayName("ntv").setVlcUrl("239.35.20.47:10000"));
+		channelRepo.save(new Channel("sixx.de").setDisplayName("SIXX").setVlcUrl("239.35.20.9:10000"));
+		channelRepo.save(new Channel("max.prosieben.de").setDisplayName("Pro7max").setVlcUrl("239.35.20.33:10000"));
+		channelRepo.save(new Channel("nitro.rtl.de").setDisplayName("RTLNITRO").setVlcUrl("239.35.20.59:10000"));
+
+//		channelRepo.save(new Channel("arte.de").setDisplayName("arte").setVlcUrl("239.35.10.20:10000"));
+		channelRepo.save(new Channel("phoenix.daserste.de").setDisplayName("Phoenix").setVlcUrl("239.35.10.22:10000"));
+		channelRepo.save(new Channel("3sat.de").setDisplayName("3sat").setVlcUrl("239.35.10.6:10000"));
+
+		
 		channelRepo.save(new Channel("arte.de").setDisplayName("ARTE HD").setVlcUrl("239.35.10.3:10000"));
 	}
 	
