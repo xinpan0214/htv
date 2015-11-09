@@ -29,6 +29,12 @@ public class ChannelController {
 		return "ok";
 	}
 	
+	@RequestMapping("/load")
+	public String loadInfo() throws IOException {
+		channelService.loadIcons();
+		return "ok";
+	}
+	
 	@RequestMapping("/")
 	public Iterable<Channel> findChannels() {
 		return channelService.findAllChannels();
@@ -38,4 +44,5 @@ public class ChannelController {
 	public String getEpg() throws IOException {
 		return channelService.getEpg(null);
 	}
+
 }
