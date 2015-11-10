@@ -29,7 +29,7 @@
       		<tr th:each="channel : ${channels}">
       			<td><img height="42" width="42" src="test.png" th:attr="src=${channel.iconUrl}"/></td>
       			<td>
-      				<a href="#" th:href="@{'rtp://'+${channel.vlcUrl}}" th:text="${channel.displayName}">Link</a>
+      				<a href="#" th:href="@{'rtp://@'+${channel.vlcUrl}}" th:text="${channel.displayName}">Link</a>
       			</td>
       			<td th:text="${channel.vlcUrl}"></td>
       		</tr>

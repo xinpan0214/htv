@@ -31,8 +31,8 @@ public class ChannelService {
 	
 	public void initializeDefaults() {
 		log.info("Initializing channel database");
-		channelRepo.save(new Channel("hd.daserste.de").setDisplayName("Das Erste HD").setVlcUrl("239.35.10.1:100000"));
-		channelRepo.save(new Channel("daserste.de").setDisplayName("Das Erste").setVlcUrl("239.35.10.4:100000"));
+		channelRepo.save(new Channel("hd.daserste.de").setDisplayName("Das Erste HD").setVlcUrl("239.35.10.1:10000"));
+		channelRepo.save(new Channel("daserste.de").setDisplayName("Das Erste").setVlcUrl("239.35.10.4:10000"));
 		channelRepo.save(new Channel("hd.zdf.de").setDisplayName("ZDF HD").setVlcUrl("239.35.10.2:10000"));
 		channelRepo.save(new Channel("sat1.de").setDisplayName("SAT.1").setVlcUrl("239.35.20.20:10000"));
 		channelRepo.save(new Channel("gold.sat1.de").setDisplayName("SAT.1 Gold").setVlcUrl("239.35.20.24:10000"));
@@ -59,6 +59,12 @@ public class ChannelService {
 
 		
 		channelRepo.save(new Channel("arte.de").setDisplayName("ARTE HD").setVlcUrl("239.35.10.3:10000"));
+		
+		try {
+			loadInfo();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 	public Iterable<Channel> findAllChannels() {

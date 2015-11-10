@@ -27,7 +27,12 @@ public class HomeController {
 		return "home";
 	}
 	
-	@RequestMapping("/{channel}")
+	@RequestMapping("/channels")
+	public String getChannels() {
+		return "home";
+	}
+	
+	@RequestMapping("/channels/{channel}")
 	public String getChannel(@PathVariable String channel) {
 		return "home";
 	}
