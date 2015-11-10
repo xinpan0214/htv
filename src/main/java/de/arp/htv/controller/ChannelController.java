@@ -31,7 +31,7 @@ public class ChannelController {
 	
 	@RequestMapping("/load")
 	public String loadInfo() throws IOException {
-		channelService.loadIcons();
+		channelService.loadInfo();
 		return "ok";
 	}
 	
@@ -40,9 +40,4 @@ public class ChannelController {
 		return channelService.findAllChannels();
 	}
 	
-	@RequestMapping("/epg")
-	public String getEpg() throws IOException {
-		return channelService.getEpg(null);
-	}
-
 }

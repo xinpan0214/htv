@@ -4,33 +4,16 @@
 package de.arp.htv.service;
 
 import java.io.IOException;
-import java.io.InputStream;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 import de.arp.htv.model.Channel;
 import de.arp.htv.model.ChannelInfo;
 import de.arp.htv.model.ChannelInfoProvider;
-import de.arp.htv.model.XmlTvContentHandler;
 import de.arp.htv.repo.ChannelRepo;
-import de.arp.htv.service.repo.DataRepositoryService;
 
 /**
  * @author arp
@@ -39,27 +22,15 @@ import de.arp.htv.service.repo.DataRepositoryService;
 @Service
 public class ChannelService {
 
-	private static final String CHANNEL_URL = "http://xmltv.xmltv.se/channels-Germany.xml.gz";
-	
 	private static final Logger log = LoggerFactory.getLogger(ChannelService.class);
 
 	@Autowired
-	private ChannelInfoProvider iconProvider; 
-	@Autowired
-	private DataRepositoryService dataRepo;
+	private ChannelInfoProvider infoProvider; 
 	@Autowired
 	private ChannelRepo channelRepo;
 	
-	private static XMLReader getXMLReader() throws ParserConfigurationException, SAXException {
-		SAXParserFactory factory = SAXParserFactory.newInstance();
-		SAXParser parser = factory.newSAXParser();
-		XMLReader reader = parser.getXMLReader();
-		return reader;
-	}
-	
 	public void initializeDefaults() {
 		log.info("Initializing channel database");
-		dataRepo.getLocation("lastUpdate");
 		channelRepo.save(new Channel("hd.daserste.de").setDisplayName("Das Erste HD").setVlcUrl("239.35.10.1:100000"));
 		channelRepo.save(new Channel("daserste.de").setDisplayName("Das Erste").setVlcUrl("239.35.10.4:100000"));
 		channelRepo.save(new Channel("hd.zdf.de").setDisplayName("ZDF HD").setVlcUrl("239.35.10.2:10000"));
@@ -94,33 +65,15 @@ public class ChannelService {
 		return channelRepo.findAll();
 	}
 	
-	public String getEpg(Channel channel) throws IOException {
-		CloseableHttpClient httpClient = HttpClients.createDefault();
-		HttpGet get = new HttpGet("http://xmltv.xmltv.se/3sat.de_2015-10-27.xml.gz");
-		CloseableHttpResponse response = null;
-		try {
-			response = httpClient.execute(get);
-			HttpEntity ent = response.getEntity();
-			if (ent != null) {
-				InputStream in = ent.getContent();
-				IOUtils.copy(in, System.out);
-				in.close();
-			}
-		} catch (Exception ex) {
-			return "failure";
-		} finally {
-			if (response != null) {
-				response.close();
-			}
-		}
-		return "success";
-	}
-	
-	public void loadIcons() throws IOException {
+	public void loadInfo() throws IOException {
 		for (Channel channel : findAllChannels()) {
-			ChannelInfo ch = this.iconProvider.getChannelInfo(channel.getId());
-			channel.setIconUrl(ch.getIconUrl());
-			channelRepo.save(channel);
+			ChannelInfo ch = this.infoProvider.getChannelInfo(channel.getId());
+			if (ch != null) {
+				channel.setIconUrl(ch.getIconUrl());
+				channelRepo.save(channel);
+			} else {
+				log.warn("Failed to load info for channel " + channel.getId());
+			}
 		}		
 	}
 	

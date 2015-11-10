@@ -56,11 +56,13 @@ public class XmlTvChannelInfoProvider implements ChannelInfoProvider {
 	protected DataLocation initLocation() throws IOException {
 		DataLocation loc = getLocation();
 		if (!loc.exists()) {
-			logger.info("Loading channel information...");
+			logger.info("Loading channel information from web...");
 			OutputStream out = loc.getOutputStream();
 			loadInfo(out);
 			out.flush(); out.close();
 			logger.info("done!");
+		} else {
+			logger.info("Location set to " + loc.getName());
 		}
 		return loc;
 	}
@@ -151,7 +153,8 @@ public class XmlTvChannelInfoProvider implements ChannelInfoProvider {
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
 			if (EL_CHANNEL.equals(qName)) {
-				channelMap.put(qName, channel);
+				logger.info("Adding channel " + channel.getId());
+				channelMap.put(channel.getId(), channel);
 				channel = null;
 			} else if (EL_DISPLAYNAME.equals(qName)) {
 				channel.setDisplayName(buffer.toString());

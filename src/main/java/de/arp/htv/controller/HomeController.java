@@ -6,6 +6,7 @@ package de.arp.htv.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import de.arp.htv.service.ChannelService;
@@ -23,6 +24,11 @@ public class HomeController {
 	@RequestMapping("/")
 	public String home(Model model) {
 		model.addAttribute("channels",channelService.findAllChannels());
+		return "home";
+	}
+	
+	@RequestMapping("/{channel}")
+	public String getChannel(@PathVariable String channel) {
 		return "home";
 	}
 }
