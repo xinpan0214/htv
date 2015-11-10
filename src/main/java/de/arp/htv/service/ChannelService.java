@@ -26,8 +26,11 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import de.arp.htv.model.Channel;
+import de.arp.htv.model.ChannelInfo;
+import de.arp.htv.model.ChannelInfoProvider;
 import de.arp.htv.model.XmlTvContentHandler;
 import de.arp.htv.repo.ChannelRepo;
+import de.arp.htv.service.repo.DataRepositoryService;
 
 /**
  * @author arp
@@ -39,7 +42,11 @@ public class ChannelService {
 	private static final String CHANNEL_URL = "http://xmltv.xmltv.se/channels-Germany.xml.gz";
 	
 	private static final Logger log = LoggerFactory.getLogger(ChannelService.class);
-	
+
+	@Autowired
+	private ChannelInfoProvider iconProvider; 
+	@Autowired
+	private DataRepositoryService dataRepo;
 	@Autowired
 	private ChannelRepo channelRepo;
 	
@@ -52,6 +59,7 @@ public class ChannelService {
 	
 	public void initializeDefaults() {
 		log.info("Initializing channel database");
+		dataRepo.getLocation("lastUpdate");
 		channelRepo.save(new Channel("hd.daserste.de").setDisplayName("Das Erste HD").setVlcUrl("239.35.10.1:100000"));
 		channelRepo.save(new Channel("daserste.de").setDisplayName("Das Erste").setVlcUrl("239.35.10.4:100000"));
 		channelRepo.save(new Channel("hd.zdf.de").setDisplayName("ZDF HD").setVlcUrl("239.35.10.2:10000"));
@@ -109,26 +117,11 @@ public class ChannelService {
 	}
 	
 	public void loadIcons() throws IOException {
-		CloseableHttpClient httpclient = HttpClients.createDefault();	
-		HttpGet httpGet = new HttpGet(CHANNEL_URL);
-		CloseableHttpResponse response = null;
-		try {
-			response = httpclient.execute(httpGet);
-			XMLReader reader = getXMLReader();
-			XmlTvContentHandler handler = new XmlTvContentHandler(channelRepo);
-			reader.setContentHandler(handler);
-			log.info("Parsing XmlTV channel info");
-			reader.parse(new InputSource(response.getEntity().getContent()));
-		} catch (ClientProtocolException ex) {
-			ex.printStackTrace();
-		} catch (ParserConfigurationException ex) {
-			ex.printStackTrace();
-		} catch (SAXException ex) {
-			ex.printStackTrace();
-		} finally {
-			if (response != null) response.close();
-		}
-		
+		for (Channel channel : findAllChannels()) {
+			ChannelInfo ch = this.iconProvider.getChannelInfo(channel.getId());
+			channel.setIconUrl(ch.getIconUrl());
+			channelRepo.save(channel);
+		}		
 	}
 	
 }
