@@ -55,7 +55,7 @@ public class ChannelService {
 		channelRepo.save(new Channel("kika.daserste.de").setDisplayName("Ki.Ka").setVlcUrl("239.35.10.6:10000"));
 		channelRepo.save(new Channel("einsextra.daserste.de").setDisplayName("Tagesschau 24").setVlcUrl("239.35.10.25:10000"));
 		channelRepo.save(new Channel("einsfestival.daserste.de").setDisplayName("Einsfestival").setVlcUrl("239.35.10.21:10000"));
-		channelRepo.save(new Channel("einsplus.daserste.de").setDisplayName("EinsPlus").setVlcUrl("39.35.10.26:10000"));
+		channelRepo.save(new Channel("einsplus.daserste.de").setDisplayName("EinsPlus").setVlcUrl("239.35.10.26:10000"));
 
 		
 		channelRepo.save(new Channel("arte.de").setDisplayName("ARTE HD").setVlcUrl("239.35.10.3:10000"));
