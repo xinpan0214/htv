@@ -36,7 +36,6 @@ public class XmlTvContentHandler extends DefaultHandler {
 		if (EL_CHANNEL.equals(qName)) {
 			String id = attributes.getValue("id");
 			channel = new Channel(id);
-			System.out.println(id);
 		} else if (EL_BASEURL.equals(qName)) {
 			buffer = new StringBuffer();
 		} else if (EL_ICON.equals(qName)) {

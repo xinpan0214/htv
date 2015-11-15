@@ -3,6 +3,9 @@
  */
 package de.arp.htv.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -24,6 +27,7 @@ public class Channel {
 	private String channelUrl;
 	@Column
 	private String vlcUrl;
+
 	
 	public Channel() {
 		

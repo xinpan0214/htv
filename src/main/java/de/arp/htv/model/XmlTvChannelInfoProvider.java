@@ -40,7 +40,9 @@ public class XmlTvChannelInfoProvider implements ChannelInfoProvider {
 	private static final Logger logger = LoggerFactory.getLogger(XmlTvChannelInfoProvider.class);
 	
 	private static final String CHANNEL_URL = "http://xmltv.xmltv.se/channels-Germany.xml.gz";
+	private static final String EPG_URL = "http://combined.xmltv.se/germany.xml";
 	private static final String CHANNEL_FILE = "channels.xml";
+	private static final String EPG_FILE = "epg.xml";
 	
 	@Autowired
 	private DataRepositoryService dataRepo;
@@ -49,12 +51,16 @@ public class XmlTvChannelInfoProvider implements ChannelInfoProvider {
 
 	private Map<String, ChannelInfo> channelMap = null;
 	
-	protected DataLocation getLocation() {
+	protected DataLocation getChannelLocation() {
 		return dataRepo.getLocation(CHANNEL_FILE);
 	}
 	
+	protected DataLocation getEpgLocation() {
+		return dataRepo.getLocation(EPG_FILE);
+	}
+	
 	protected DataLocation initLocation() throws IOException {
-		DataLocation loc = getLocation();
+		DataLocation loc = getChannelLocation();
 		if (!loc.exists()) {
 			logger.info("Loading channel information from web...");
 			OutputStream out = loc.getOutputStream();
@@ -64,7 +70,32 @@ public class XmlTvChannelInfoProvider implements ChannelInfoProvider {
 		} else {
 			logger.info("Location set to " + loc.getName());
 		}
+		DataLocation epgLoc = getEpgLocation();
+		if (!epgLoc.exists()) {
+			logger.info("Loading channel information from web...");
+			OutputStream out = epgLoc.getOutputStream();
+			loadEpg(out);
+			out.flush(); out.close();
+			logger.info("done!");
+		} else {
+			logger.info("Location set to " + epgLoc.getName());
+		}
 		return loc;
+	}
+	
+	protected void loadEpg(OutputStream out) throws IOException {
+		CloseableHttpClient httpclient = HttpClients.createDefault();	
+		HttpGet httpGet = new HttpGet(EPG_URL);
+		CloseableHttpResponse response = null;
+		try {
+			response = httpclient.execute(httpGet);
+			logger.info("Writing channel info to cache");
+			IOUtils.copy(response.getEntity().getContent(), out);
+		} catch (ClientProtocolException ex) {
+			ex.printStackTrace();
+		} finally {
+			if (response != null) response.close();
+		}
 	}
 	
 	protected void loadInfo(OutputStream out) throws IOException {
@@ -90,6 +121,12 @@ public class XmlTvChannelInfoProvider implements ChannelInfoProvider {
 			reader.setContentHandler(handler);			
 			reader.parse(new InputSource(loc.getInputStream()));
 			this.channelMap = handler.getChannelMap();
+			
+			XMLReader reader2 = xmlService.getXMLReader();
+			XmlTvEpgContentHandler handler2 = new XmlTvEpgContentHandler(this.channelMap);
+			reader2.setContentHandler(handler2);		
+			reader2.setEntityResolver(handler2);
+			reader2.parse(new InputSource(getEpgLocation().getInputStream()));
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 			this.channelMap = new HashMap<String, ChannelInfo>();
@@ -153,7 +190,7 @@ public class XmlTvChannelInfoProvider implements ChannelInfoProvider {
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
 			if (EL_CHANNEL.equals(qName)) {
-				logger.info("Adding channel " + channel.getId());
+				logger.debug("Adding channel " + channel.getId());
 				channelMap.put(channel.getId(), channel);
 				channel = null;
 			} else if (EL_DISPLAYNAME.equals(qName)) {

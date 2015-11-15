@@ -4,6 +4,8 @@
 package de.arp.htv.service;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import de.arp.htv.model.Channel;
 import de.arp.htv.model.ChannelInfo;
 import de.arp.htv.model.ChannelInfoProvider;
+import de.arp.htv.model.Program;
 import de.arp.htv.repo.ChannelRepo;
 
 /**
@@ -72,11 +75,20 @@ public class ChannelService {
 	}
 	
 	public void loadInfo() throws IOException {
+		Date now = new Date();
+		Calendar c1 = Calendar.getInstance();
+		c1.setTime(now);
+		Calendar c2 = Calendar.getInstance();
+		c2.setTime(now);
+		c2.add(Calendar.HOUR_OF_DAY, 6);
 		for (Channel channel : findAllChannels()) {
 			ChannelInfo ch = this.infoProvider.getChannelInfo(channel.getId());
 			if (ch != null) {
 				channel.setIconUrl(ch.getIconUrl());
 				channelRepo.save(channel);
+				for (Program p : ch.getProgramsInPeriod(c1, c2)) {
+					System.out.println("" + p.getChannelId() + " " + p.getTitle());
+				}
 			} else {
 				log.warn("Failed to load info for channel " + channel.getId());
 			}
