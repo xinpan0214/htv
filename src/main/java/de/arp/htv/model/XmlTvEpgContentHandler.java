@@ -33,7 +33,7 @@ public class XmlTvEpgContentHandler extends DefaultHandler implements EntityReso
 	protected static Calendar toCalendar(String s) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.parseInt(s.substring(0,4)));
-		cal.set(Calendar.MONTH, Integer.parseInt(s.substring(4,6)));
+		cal.set(Calendar.MONTH, Integer.parseInt(s.substring(4,6)) - 1);
 		cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(s.substring(6,8)));
 		cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(s.substring(8,10)));
 		cal.set(Calendar.MINUTE, Integer.parseInt(s.substring(10,12)));

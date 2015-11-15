@@ -41,7 +41,7 @@ public class ChannelInfo {
 	protected String printCal(Calendar cal) {
 		return String.format("%s.%s.%s %s:%s", 
 				cal.get(Calendar.DAY_OF_MONTH),
-				cal.get(Calendar.MONTH),
+				cal.get(Calendar.MONTH) + 1,
 				cal.get(Calendar.YEAR),
 				cal.get(Calendar.HOUR_OF_DAY),
 				cal.get(Calendar.MINUTE));
@@ -64,15 +64,6 @@ public class ChannelInfo {
 						)
 						);
 			} else {
-				System.out.println(String.format("%s: Start: %s compares as %s,%s against %s and %s", 
-						program.getChannelId(),
-						printCal(program.getStartDate()),
-						cmp1,
-						cmp2,
-						printCal(start),
-						printCal(end)
-						)
-						);
 			}
 		}
 		Collections.sort(ret, CMP);
